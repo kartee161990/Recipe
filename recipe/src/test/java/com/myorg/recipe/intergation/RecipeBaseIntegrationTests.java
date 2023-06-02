@@ -24,11 +24,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @ActiveProfiles(value = "integration-test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RecipeBaseIntegrationTests {
-
     @Autowired
     private WebTestClient webTestClient;
-
-
     @Test
     @Order(1)
     void shouldCreateNewRecipe() {
@@ -43,8 +40,7 @@ public class RecipeBaseIntegrationTests {
                 .servingSize(2)
                 .build();
 
-
-        var recipeCreationResponse = webTestClient
+        webTestClient
                 .post()
                 .uri("api/v1/recipe/create")
                 .body(Mono.just(aRecipe), RecipeDto.class)
@@ -56,10 +52,7 @@ public class RecipeBaseIntegrationTests {
                 .expectBody()
                 .jsonPath("message ")
                 .value(containsString("Successfully created the recipe!"));
-
-
     }
-
 
     @Test
     @Order(2)
@@ -74,14 +67,12 @@ public class RecipeBaseIntegrationTests {
                 .expectStatus()
                 .isOk()
                 .expectBody()
-                .consumeWith(System.out::println)
                 .jsonPath("message ")
                 .value(containsString("Retrieved the recipe successfully!"))
                 .jsonPath("$.data[0].name")
                 .value(equalTo("pizza"))
                 .jsonPath("$.data[1].name")
                 .value(equalTo("Pasta"));
-
     }
 
     @Test
@@ -98,8 +89,7 @@ public class RecipeBaseIntegrationTests {
                 .servingSize(2)
                 .build();
 
-
-        var recipeCreationResponse = webTestClient
+        webTestClient
                 .put()
                 .uri("api/v1/recipe/2")
                 .body(Mono.just(aRecipe), RecipeDto.class)
@@ -114,16 +104,15 @@ public class RecipeBaseIntegrationTests {
                 .jsonPath("$.data.instructions")
                 .value(containsString("warm"));
 
-
     }
 
     @Test
     @Order(4)
     void shouldDeleteRecipe() {
 
-        var recipeCreationResponse = webTestClient
+         webTestClient
                 .delete()
-                .uri("api/v1/recipe/1")
+                .uri("api/v1/recipe/2")
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .header(ACCEPT, APPLICATION_JSON_VALUE)
                 .exchange()
@@ -151,9 +140,9 @@ public class RecipeBaseIntegrationTests {
                 .build();
 
 
-        var recipeCreationResponse = webTestClient
+        webTestClient
                 .put()
-                .uri("api/v1/recipe/1")
+                .uri("api/v1/recipe/2")
                 .body(Mono.just(aRecipe), RecipeDto.class)
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .header(ACCEPT, APPLICATION_JSON_VALUE)
@@ -163,8 +152,6 @@ public class RecipeBaseIntegrationTests {
                 .expectBody()
                 .jsonPath("message ")
                 .value(containsString("Validation error: There is no recipe related to the provided id!"));
-
-
     }
 
 
@@ -172,16 +159,14 @@ public class RecipeBaseIntegrationTests {
     @Order(6)
     void shouldThrowNotFoundExceptionForDelete() {
 
-        var recipeCreationResponse = webTestClient
+        webTestClient
                 .delete()
-                .uri("api/v1/recipe/1")
+                .uri("api/v1/recipe/2")
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .header(ACCEPT, APPLICATION_JSON_VALUE)
                 .exchange()
                 .expectStatus()
                 .isNotFound();
-
-
     }
 
 }
