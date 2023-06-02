@@ -32,6 +32,7 @@ public class RecipeService {
         foundRecipe.setInstructions(recipeInp.getInstructions());
         foundRecipe.setServingSize(recipeInp.getServingSize());
         foundRecipe.setIngredient(recipeInp.getIngredient());
+
         return recipeRepository.save(foundRecipe);
 
     }
