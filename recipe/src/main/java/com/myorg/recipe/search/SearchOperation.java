@@ -6,23 +6,22 @@ public enum SearchOperation {
     ANY, ALL;
 
     public static SearchOperation getOperation(String input) {
-        switch (input) {
-            case "cn": return CONTAINS;
-            case "nc": return DOES_NOT_CONTAIN;
-            case "eq": return EQUAL;
-            case "ne": return NOT_EQUAL;
-            case "with": return WITH;
-
-            default: return null;
-        }
+        return switch (input) {
+            case "cn" -> CONTAINS;
+            case "nc" -> DOES_NOT_CONTAIN;
+            case "eq" -> EQUAL;
+            case "ne" -> NOT_EQUAL;
+            case "with" -> WITH;
+            default -> null;
+        };
     }
 
     public static SearchOperation getDataOption(String dataOption){
-        switch(dataOption) {
-            case "all": return ALL;
-            case "any": return ANY;
-            default: return null;
-        }
+        return switch (dataOption) {
+            case "all" -> ALL;
+            case "any" -> ANY;
+            default -> null;
+        };
     }
 
 }
