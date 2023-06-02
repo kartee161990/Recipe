@@ -6,9 +6,7 @@ import com.myorg.recipe.entity.Recipe;
 import com.myorg.recipe.exception.RecipeNotFoundException;
 import com.myorg.recipe.search.RecipeSearchDto;
 import com.myorg.recipe.search.RecipeSpecificationBuilder;
-import com.myorg.recipe.search.SearchCriteria;
 import com.myorg.recipe.service.RecipeService;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "api/v1/recipe")
@@ -79,8 +76,8 @@ public class RecipeController {
     @PostMapping(value = "/search")
     public ResponseEntity<RecipeResponse> searchRecipes(@RequestBody RecipeSearchDto recipeSearchDto) {
 
-        RecipeSpecificationBuilder builder = new RecipeSpecificationBuilder();
-        List<SearchCriteria> criteriaList = recipeSearchDto.getSearchCriteriaList();
+        var builder = new RecipeSpecificationBuilder();
+        var criteriaList = recipeSearchDto.getSearchCriteriaList();
 
         if (recipeSearchDto.getDataOption() != null) {
             builder.with(recipeSearchDto.getDataOption());
@@ -96,8 +93,6 @@ public class RecipeController {
                 .data(recipe.isPresent() ? recipe.get() : List.of())
                 .message("Successfully retried the recipes.")
                 .responseCode(HttpStatus.OK).build();
-
-
 
         return new ResponseEntity<>(response, response.getResponseCode());
     }
