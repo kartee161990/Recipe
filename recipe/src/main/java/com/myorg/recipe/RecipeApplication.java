@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @SpringBootApplication
@@ -29,11 +28,11 @@ public class RecipeApplication {
 	CommandLineRunner runner(RecipeService recipeService){
 		return args -> {
 			// read JSON and load json
-			ObjectMapper mapper = new ObjectMapper();
+			var mapper = new ObjectMapper();
 			TypeReference<List<Recipe>> typeReference = new TypeReference<>(){};
-			InputStream inputStream = TypeReference.class.getResourceAsStream("/json/recipe.json");
+			var inputStream = TypeReference.class.getResourceAsStream("/json/recipe.json");
 			try {
-				List<Recipe> recipes = mapper.readValue(inputStream,typeReference);
+				var recipes = mapper.readValue(inputStream,typeReference);
 				recipes.stream().forEach(recipe -> recipeService.save(recipe));
 
 				log.info("Recipes Saved!");
