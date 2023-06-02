@@ -32,7 +32,7 @@ To run the application locally you can use the following ways
 ```
 - Using Java command, in your project target folder you can find the jar
 ```bash
- java -jar recipe/target/recipe-0.0.1-SNAPSHOT.jar
+ java -jar recipe/target/recipe-0.0.1-SNAPSHOT.jar --spring.profiles.active=test
 ```
 
 Once you have started the application it will load few entries in the in memory H2 database for our testing. The data will be loaded in 'test' and 'integration-test' profiles.
