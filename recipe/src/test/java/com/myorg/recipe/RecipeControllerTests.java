@@ -39,7 +39,6 @@ public class RecipeControllerTests {
 
     @Test
     public void givenRecipes_whenGetRecipes_thenReturnRecipes() {
-
         var ingredients = new Ingredient();
         ingredients.setIngName("dough");
         ingredients.setMeasurement("100G");
@@ -49,10 +48,7 @@ public class RecipeControllerTests {
         recipe.setIngredient(List.of(ingredients));
         recipe.setIsVegetarian(true);
 
-
         when(recipeService.getAllRecipes()).thenReturn(List.of(recipe));
-
-
         var results = recipeController.getRecipes();
 
         assertThat(results.getStatusCode().value()).isEqualTo(HttpStatus.OK.value());
@@ -62,7 +58,6 @@ public class RecipeControllerTests {
 
     @Test
     public void givenRecipe_whenCreateRecipe_thenReturnCreatedRecipe() {
-
         var ingredients = new Ingredient();
         ingredients.setIngName("dough");
         ingredients.setMeasurement("100G");
@@ -81,10 +76,8 @@ public class RecipeControllerTests {
                 .isVegetarian(true)
                 .build();
 
-
         when(modelMapper.map(recipeDto, Recipe.class)).thenReturn(recipe);
         when(recipeService.save(recipe)).thenReturn(recipe);
-
 
         var results = recipeController.addRecipe(recipeDto);
 
@@ -119,7 +112,6 @@ public class RecipeControllerTests {
         when(recipeService.findByRecipeId(1L)).thenReturn(Optional.of(recipe));
         when(recipeService.updateRecipe(recipe, recipe)).thenReturn(recipe);
 
-
         var results = recipeController.updateRecipe(1L, recipeDto);
 
         assertThat(results.getStatusCode().value()).isEqualTo(HttpStatus.OK.value());
@@ -136,7 +128,6 @@ public class RecipeControllerTests {
         searchCriteria.setOperation("eq");
         searchCriteria.setValue("pizza");
 
-
         var recipeRequest = new RecipeSearchDto();
         recipeRequest.setSearchCriteriaList(List.of(searchCriteria));
 
@@ -150,7 +141,6 @@ public class RecipeControllerTests {
         recipe.setServingSize(2);
         recipe.setIngredient(List.of(ingredients));
         recipe.setIsVegetarian(true);
-
 
         when(recipeService.findBySearchCriteria(any(RecipeSpecification.class))).thenReturn(Optional.of(List.of(recipe)));
 
@@ -173,7 +163,6 @@ public class RecipeControllerTests {
         searchCriteriaIngredient.setFilterKey("ingredient");
         searchCriteriaIngredient.setOperation("eq");
         searchCriteriaIngredient.setValue("dough");
-
 
         var recipeRequest = new RecipeSearchDto();
         recipeRequest.setSearchCriteriaList(List.of(searchCriteriaInstructions, searchCriteriaIngredient));
@@ -204,7 +193,7 @@ public class RecipeControllerTests {
 
     @Test
     public void whenExceptionThrown_thenAssertionSucceeds() {
-        Exception exception = assertThrows(RecipeNotFoundException.class, () -> {
+        var exception = assertThrows(RecipeNotFoundException.class, () -> {
             var ingredients = new Ingredient();
             ingredients.setIngName("dough");
             ingredients.setMeasurement("100G");
@@ -224,10 +213,8 @@ public class RecipeControllerTests {
                     .build();
 
             when(recipeService.findByRecipeId(1L)).thenThrow(new RecipeNotFoundException());
-
             recipeController.updateRecipe(1L, recipeDto);
         });
-
 
         assertTrue(exception instanceof RecipeNotFoundException);
     }
