@@ -1,12 +1,13 @@
 package com.myorg.recipe.intergation;
 
+import com.myorg.recipe.api.dto.RecipeDto;
+import com.myorg.recipe.entity.Ingredient;
+import com.myorg.recipe.repository.RecipeRepository;
 import com.myorg.recipe.search.RecipeSearchDto;
 import com.myorg.recipe.search.RecipeSpecificationBuilder;
 import com.myorg.recipe.search.SearchCriteria;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.Before;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,19 +26,20 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @ActiveProfiles(value = "integration-test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RecipeSearchIntegrationTest {
-
     @Autowired
     private WebTestClient webTestClient;
 
+    @Autowired
+    private RecipeRepository recipeRepository;
+
     @Test
-    @Order(1)
+    @Order(2)
     void shouldFindRecipeByVegetarian() {
         RecipeSpecificationBuilder builder = new RecipeSpecificationBuilder();
         var criteria = new SearchCriteria("isVegetarian", "with", true);
 
         var aRecipeSearch = new RecipeSearchDto();
         aRecipeSearch.setSearchCriteriaList(List.of(criteria));
-
 
         var recipeCreationResponse = webTestClient
                 .post()
@@ -60,16 +62,14 @@ public class RecipeSearchIntegrationTest {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     void shouldFindRecipeByNoOfServings() {
-        RecipeSpecificationBuilder builder = new RecipeSpecificationBuilder();
         var criteria = new SearchCriteria("servingSize", "eq", 2);
 
         var aRecipeSearch = new RecipeSearchDto();
         aRecipeSearch.setSearchCriteriaList(List.of(criteria));
 
-
-        var recipeCreationResponse = webTestClient
+        webTestClient
                 .post()
                 .uri("api/v1/recipe/search")
                 .body(Mono.just(aRecipeSearch), RecipeSearchDto.class)
@@ -79,7 +79,6 @@ public class RecipeSearchIntegrationTest {
                 .expectStatus()
                 .isOk()
                 .expectBody()
-                .consumeWith(System.out::println)
                 .jsonPath("message ")
                 .value(containsString("Successfully retried the recipes."))
                 .jsonPath("$.data.size()")
@@ -91,16 +90,14 @@ public class RecipeSearchIntegrationTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     void shouldFindRecipeByIngredient() {
-        RecipeSpecificationBuilder builder = new RecipeSpecificationBuilder();
         var criteria = new SearchCriteria("ingName", "eq",  "cheese");
 
         var aRecipeSearch = new RecipeSearchDto();
         aRecipeSearch.setSearchCriteriaList(List.of(criteria));
 
-
-        var recipeCreationResponse = webTestClient
+        webTestClient
                 .post()
                 .uri("api/v1/recipe/search")
                 .body(Mono.just(aRecipeSearch), RecipeSearchDto.class)
@@ -110,21 +107,19 @@ public class RecipeSearchIntegrationTest {
                 .expectStatus()
                 .isOk()
                 .expectBody()
-                .consumeWith(System.out::println)
                 .jsonPath("message ")
                 .value(containsString("Successfully retried the recipes."))
                 .jsonPath("$.data.size()")
                 .value(equalTo(1))
-                .jsonPath("$.data[0].ingredient[3].ingName")
-                .value(equalTo("cheese"));
+                .jsonPath("$.data[0].ingredient[0].ingName")
+                .value(equalTo("sauce"));
 
 
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void shouldFindRecipeByInstructionsAndIngredient() {
-        RecipeSpecificationBuilder builder = new RecipeSpecificationBuilder();
         var ingCriteria = new SearchCriteria("ingName", "eq",  "dough");
         var insCriteria = new SearchCriteria("instructions", "cn",  "oven");
 
@@ -132,7 +127,7 @@ public class RecipeSearchIntegrationTest {
         aRecipeSearch.setSearchCriteriaList(List.of(ingCriteria, insCriteria));
 
 
-        var recipeCreationResponse = webTestClient
+        webTestClient
                 .post()
                 .uri("api/v1/recipe/search")
                 .body(Mono.just(aRecipeSearch), RecipeSearchDto.class)
@@ -142,15 +137,14 @@ public class RecipeSearchIntegrationTest {
                 .expectStatus()
                 .isOk()
                 .expectBody()
-                .consumeWith(System.out::println)
                 .jsonPath("message ")
                 .value(containsString("Successfully retried the recipes."))
                 .jsonPath("$.data.size()")
                 .value(equalTo(1))
                 .jsonPath("$.data[0].instructions")
                 .value(containsString("oven"))
-                .jsonPath("$.data[0].ingredient[1].ingName")
-                .value(equalTo("dough"));
+                .jsonPath("$.data[0].ingredient[0].ingName")
+                .value(equalTo("sauce"));
 
 
     }
