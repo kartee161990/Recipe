@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1,
+    "name": "pizza",
+    "instructions": "bake pizza in oven",
+    "isVegetarian": true,
+    "servingSize": 1,
+    "ingredient": [{
+      "ingId": 101,
+      "ingName": "sauce",
+      "measurement": "30ML"
+    },
+    {
+      "ingId": 102,
+      "ingName": "dough",
+      "measurement": "100G"
+    },
+    {
+      "ingId": 103,
+      "ingName": "vegetables",
+      "measurement": "100G"
+    },
+    {
+      "ingId": 104,
+      "ingName": "cheese",
+      "measurement": "100G"
+    }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "chicken pasta",
+    "instructions": "cook pasta in boiling water",
+    "isVegetarian": false,
+    "servingSize": 2,
+    "ingredient": [{
+      "ingId": 105,
+      "ingName": "chicken",
+      "measurement": "100G"
+      },
+      {
+        "ingId": 106,
+        "ingName": "pasta",
+        "measurement": "50G"
+      },
+      {
+        "ingId": 107,
+        "ingName": "cream",
+        "measurement": "50G"
+      }]
+
+  }
+]
