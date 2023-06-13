@@ -9,6 +9,7 @@ import com.myorg.recipe.search.RecipeSearchDto;
 import com.myorg.recipe.search.RecipeSpecification;
 import com.myorg.recipe.search.SearchCriteria;
 import com.myorg.recipe.service.RecipeService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,11 +20,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -115,7 +118,7 @@ public class RecipeControllerTests {
         var results = recipeController.updateRecipe(1L, recipeDto);
 
         assertThat(results.getStatusCode().value()).isEqualTo(HttpStatus.OK.value());
-        assertThat(((Recipe)results.getBody().getData()).getName()).isEqualTo("pasta");
+        assertThat(((Recipe) Objects.requireNonNull(results.getBody()).getData()).getName()).isEqualTo("pasta");
         verify(recipeService, times(1)).findByRecipeId(1L);
         verify(recipeService, times(1)).updateRecipe(recipe, recipe);
         verify(modelMapper, times(1)).map(recipeDto, Recipe.class);
@@ -216,6 +219,6 @@ public class RecipeControllerTests {
             recipeController.updateRecipe(1L, recipeDto);
         });
 
-        assertTrue(exception instanceof RecipeNotFoundException);
+        assertNotNull(exception);
     }
 }

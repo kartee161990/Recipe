@@ -11,7 +11,7 @@ import lombok.Setter;
 @Table(name = "ingredient")
 public class Ingredient {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long ingId;
 
     private String ingName;

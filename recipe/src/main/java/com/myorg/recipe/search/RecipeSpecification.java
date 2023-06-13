@@ -33,27 +33,26 @@ public class RecipeSpecification implements Specification<Recipe> {
         }
 
         switch (searchOperation) {
-            case CONTAINS:
+            case CONTAINS -> {
                 return cb.like(cb.lower(recipeJoin.get(searchCriteria.getFilterKey())), "%" + strToSearch + "%");
-
-            case DOES_NOT_CONTAIN:
+            }
+            case DOES_NOT_CONTAIN -> {
                 return cb.notLike(cb.lower(recipeJoin.get(searchCriteria.getFilterKey())), "%" + strToSearch + "%");
-
-            case EQUAL:
+            }
+            case EQUAL -> {
                 return (searchCriteria.getFilterKey().equals("ingName")) ?
                         cb.equal(cb.lower(recipeJoin.get(searchCriteria.getFilterKey())), strToSearch) :
                         cb.equal(recipeJoin.get(searchCriteria.getFilterKey()), strToSearch);
-
-            case NOT_EQUAL:
+            }
+            case NOT_EQUAL -> {
                 return cb.notEqual(cb.lower(recipeJoin.get(searchCriteria.getFilterKey())), strToSearch);
-
-            case WITH:
+            }
+            case WITH -> {
                 Boolean value = "true".equalsIgnoreCase(strToSearch) ? Boolean.TRUE :
                         "false".equalsIgnoreCase(strToSearch) ? Boolean.FALSE : null;
                 return cb.equal(recipeJoin.get(searchCriteria.getFilterKey()), value);
-
-            default:
-                throw new RuntimeException("Operation not supported yet");
+            }
+            default -> throw new RuntimeException("Operation not supported yet");
         }
 
     }
