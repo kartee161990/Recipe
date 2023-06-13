@@ -55,7 +55,7 @@ public class RecipeController {
                             .responseCode(HttpStatus.OK).build();
 
                     return new ResponseEntity<>(response, response.getResponseCode());
-                }).orElseThrow(() -> new RecipeNotFoundException());
+                }).orElseThrow(RecipeNotFoundException::new);
     }
 
     @DeleteMapping("/{id}")
@@ -69,7 +69,7 @@ public class RecipeController {
                             .responseCode(HttpStatus.OK).build();
 
                     return new ResponseEntity<>(response, HttpStatus.OK);
-                }).orElseThrow(() -> new RecipeNotFoundException());
+                }).orElseThrow(RecipeNotFoundException::new);
 
     }
 
@@ -83,9 +83,7 @@ public class RecipeController {
             builder.with(recipeSearchDto.getDataOption());
         }
         if (criteriaList != null) {
-            criteriaList.forEach(x-> {
-                builder.with(x);
-            });
+            criteriaList.forEach(builder::with);
         }
 
         var recipe = recipeService.findBySearchCriteria(builder.build());

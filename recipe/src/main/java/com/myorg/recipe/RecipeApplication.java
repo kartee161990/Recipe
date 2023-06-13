@@ -33,7 +33,7 @@ public class RecipeApplication {
 			var inputStream = TypeReference.class.getResourceAsStream("/json/recipe.json");
 			try {
 				var recipes = mapper.readValue(inputStream,typeReference);
-				recipes.stream().forEach(recipe -> recipeService.save(recipe));
+				recipes.forEach(recipeService::save);
 
 				log.info("Recipes Saved!");
 			} catch (IOException e) {
